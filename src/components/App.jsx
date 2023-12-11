@@ -5,16 +5,15 @@ import Filter from './Filter';
 import { nanoid } from 'nanoid';
 
 function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => {
+    const storedContacts = localStorage.getItem('contacts');
+    return storedContacts ? JSON.parse(storedContacts) : [];
+  });
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    if (parsedContacts) {
-      setContacts(parsedContacts);
-    }
-  }, []);
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
